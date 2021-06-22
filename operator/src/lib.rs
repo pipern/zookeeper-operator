@@ -1,7 +1,7 @@
 mod error;
 
 use crate::error::Error;
-
+use product_config::experiments2::ProductConfigManager;
 use async_trait::async_trait;
 use handlebars::Handlebars;
 use k8s_openapi::api::core::v1::{
@@ -560,6 +560,28 @@ impl ZookeeperState {
                                 &self.context.resource.spec.version.to_string(),
                                 &id.to_string(),
                             );
+
+                            // call to product config
+                            // Files -> configmaps
+                            // Env -> pods (container)
+                            // Cli -> pods (container)
+                            // TODO: What about "myid" -> extra_options?
+                            let mut options = HashMap::new();
+                            options.insert("tickTime".to_string(), "2000".to_string());
+                            options.insert("dataDir".to_string(), "/tmp/zookeeper".to_string());
+                            options.insert("initLimit".to_string(), "5".to_string());
+                            options.insert("syncLimit".to_string(), "2".to_string());
+                            options.insert("clientPort".to_string(), "2181".to_string());
+                            options.insert("myid".to_string(), id.to_string());
+
+                            let manager = ProductConfigManager::from_file("some_file")?;
+                            let result = manager.get("start", &self.zk_spec.version.to_string(), zookeeper_role.to_string(), options)?;
+
+                            result.cli
+                                result.env
+                                    for (name, data) in result.files {
+
+                                    }
 
                             self.create_pod(&node_name, &pod_name, pod_labels).await?;
                             self.create_config_maps(&pod_name, id).await?;

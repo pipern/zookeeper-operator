@@ -4,11 +4,26 @@ metadata:
   name: simple
 spec:
   version: 3.4.14
+  config:
+    port: 1111
+  config_overrides:
+    port: 2222
   servers:
-    selectors:
+    config:
+      port: 1111
+    config_overrides:
+      port: 2222
+    role_groups:
       default:
         selector:
           matchLabels:
             kubernetes.io/hostname: main-1.stackable.demo
-        instances: 1
-        instancesPerNode: 1
+        replicas: 1
+        config:
+          port: 1111
+          ticktime: 2
+          syncLimit: 5
+          metaXY: true
+        config_overrides:
+          port: 2222
+

@@ -9,6 +9,7 @@ version = "0.1.0-nightly"
 [dependencies]
 stackable-operator = { git = "https://github.com/stackabletech/operator-rs.git", branch = "main" }
 stackable-zookeeper-crd = { path = "../crd" }
+product-config = { path = "../../product-config" }
 
 async-trait = "0.1"
 futures = "0.3"

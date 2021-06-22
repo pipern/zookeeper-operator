@@ -28,6 +28,15 @@ pub const MANAGED_BY: &str = "stackable-zookeeper";
 pub struct ZookeeperClusterSpec {
     pub version: ZookeeperVersion,
     pub servers: RoleGroups<ZookeeperConfig>,
+    pub config: CommonConfiguration<ZookeeperConfig>,
+}
+
+impl Configuration for ZookeeperCluster {
+    fn get_cluster_config(&self) -> UserConfigAndOverrides {}
+
+    fn get_role_config(&self, role: &str) -> UserConfigAndOverrides;
+
+    fn get_role_group_config(&self, role_name: &str, role_group: &str) -> UserConfigAndOverrides;
 }
 
 #[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
